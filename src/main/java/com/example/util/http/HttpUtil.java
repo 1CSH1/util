@@ -1,4 +1,4 @@
-package com.example.util;
+package com.example.util.http;
 
 
 
@@ -37,7 +37,12 @@ public class HttpUtil {
         init(maxTotal, maxPerRoute);
     }
 
-    private void init(int maxTotal, int maxPerRoute) {
+    /**
+     * 初始化
+     * @param maxTotal      最大连接数
+     * @param maxPerRoute   每个路由最大连接数
+     */
+    private synchronized void init(int maxTotal, int maxPerRoute) {
         if (null == cm) {
             cm = new PoolingHttpClientConnectionManager();
             cm.setMaxTotal(maxTotal);// 整个连接池最大连接数
@@ -64,6 +69,11 @@ public class HttpUtil {
         return http;
     }
 
+    /**
+     * 将参数转为特定格式
+     * @param params    参数
+     * @return
+     */
     private ArrayList<NameValuePair> covertParams2NVPS(Map<String, Object> params) {
         ArrayList<NameValuePair> pairs = new ArrayList<NameValuePair>();
         if (null != params) {
