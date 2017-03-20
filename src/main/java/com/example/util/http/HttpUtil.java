@@ -2,6 +2,7 @@ package com.example.util.http;
 
 
 
+import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.ClientProtocolException;
@@ -95,7 +96,6 @@ public class HttpUtil {
         CloseableHttpResponse response = null;
         try {
             response = httpClient.execute(request);
-            // response.getStatusLine().getStatusCode();
             HttpEntity entity = response.getEntity();
             if (entity != null) {
                 String result = EntityUtils.toString(entity);
@@ -115,6 +115,31 @@ public class HttpUtil {
         }
 
         return EMPTY_STR;
+    }
+
+    /**
+     * some http request just return the headers. such as head
+     * @param request   
+     * @return
+     */
+    private Header[] getHeaders(HttpRequestBase request) {
+        CloseableHttpClient httpClient = getHttpClient();
+        CloseableHttpResponse response = null;
+        try {
+            response = httpClient.execute(request);
+            return response.getAllHeaders();
+        } catch (ClientProtocolException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                response.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return null;
     }
 
     /**
@@ -371,7 +396,7 @@ public class HttpUtil {
      * @throws UnsupportedEncodingException
      * @throws URISyntaxException
      */
-    public String head(String url) throws UnsupportedEncodingException, URISyntaxException {
+    public Header[] head(String url) throws UnsupportedEncodingException, URISyntaxException {
         return head(url, null);
     }
 
@@ -384,7 +409,7 @@ public class HttpUtil {
      * @throws UnsupportedEncodingException
      * @throws URISyntaxException
      */
-    public String head(String url, Map<String, Object> params) throws UnsupportedEncodingException, URISyntaxException {
+    public Header[] head(String url, Map<String, Object> params) throws UnsupportedEncodingException, URISyntaxException {
         return head(url, null, params);
     }
 
@@ -398,7 +423,7 @@ public class HttpUtil {
      * @throws UnsupportedEncodingException
      * @throws URISyntaxException
      */
-    public String head(String url, Map<String, Object> headers, Map<String, Object> params) throws UnsupportedEncodingException, URISyntaxException {
+    public Header[] head(String url, Map<String, Object> headers, Map<String, Object> params) throws UnsupportedEncodingException, URISyntaxException {
         URIBuilder ub = new URIBuilder();
         ub.setPath(url);
         //设置请求参数
@@ -407,7 +432,7 @@ public class HttpUtil {
         //设置请求头
         httpHead = (HttpHead) setHeaders(httpHead, headers);
 
-        return getResult(httpHead);
+        return getHeaders(httpHead);
     }
 
     /**

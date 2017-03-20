@@ -9,14 +9,17 @@ public class User {
     //名称
     private String name;
     //邮件地址
-    private String mail;
+    private String email;
+    //password of user's email
+    private String password;
 
     public User() {
     }
 
-    public User(String name, String mail) {
+    public User(String name, String email, String password) {
         this.name = name;
-        this.mail = mail;
+        this.email = email;
+        this.password = password;
     }
 
     public String getName() {
@@ -27,16 +30,24 @@ public class User {
         this.name = name;
     }
 
-    public String getMail() {
-        return mail;
+    public String getEmail() {
+        return email;
     }
 
-    public void setMail(String mail) {
-        this.mail = mail;
+    public void setEmail(String mail) {
+        this.email = mail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     @Override
     public String toString() {
-        return name + "<" + mail + ">";
+        return name + "<" + email + ">";
     }
 }
