@@ -1,7 +1,8 @@
 package com.example.util.email;
 
-import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -18,6 +19,7 @@ import org.htmlparser.tags.ImageTag;
 import org.htmlparser.util.NodeList;
 
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * send email util
@@ -33,20 +35,20 @@ public class EmailUtil {
      * @param email     email
      * @return          the result of send email
      */
-    public static int send(Email email) {
-        return 0;
+    public static List<Email> send(Email email) {
+        List<Email> emails = new ArrayList<Email>();
+        emails.add(email);
+        return send(emails);
     }
 
     /**
-     * send some email
-     * @param emails
-     * @return
+     * send some emails
+     *
+     * @param emails    the emails should be sended
+     * @return          the List of the email which send success
      */
-    public static int send(List<Email> emails) {
-        return 0;
-    }
-
-    public static void sendaaa(List<Email> emails) {
+    public static List<Email> send(List<Email> emails) {
+        List<Email> sucEmails = new ArrayList<Email>();
         if (null != emails) {
             Email tEmail;
             for (int i = 0; i < emails.size(); i++) {
@@ -155,11 +157,27 @@ public class EmailUtil {
 
                 try {
                     email.send();
+                    sucEmails.add(tEmail);
                 } catch (EmailException e) {
                     e.printStackTrace();
                 }
             }
         }
+        return sucEmails;
+    }
+
+    /**
+     * send email by asynchronous
+     *
+     * @param emails    the emails should send
+     * @return          the result of email which send success
+     */
+    public static Future<List<Email>> sendByAsy(final List<Email> emails) {
+        return executorService.submit(new Callable<List<Email>>() {
+            public List<Email> call() throws Exception {
+                return send(emails);
+            }
+        });
     }
 
 }
