@@ -64,6 +64,7 @@ public class EmailUtil {
                     email.setFrom(tEmail.getFromUser().getEmail(), tEmail.getFromUser().getName());
                 } catch (EmailException e) {
                     e.printStackTrace();
+                    continue;
                 }
                 email.setAuthentication(tEmail.getFromUser().getEmail(), tEmail.getFromUser().getPassword());
                 email.setSubject(tEmail.getSubject());
@@ -77,6 +78,7 @@ public class EmailUtil {
                             email.addTo(user.getEmail(), user.getName());
                         } catch (EmailException e) {
                             e.printStackTrace();
+                            continue;
                         }
                     }
                 }
@@ -90,6 +92,7 @@ public class EmailUtil {
                             email.addCc(user.getEmail(), user.getName());
                         } catch (EmailException e) {
                             e.printStackTrace();
+                            continue;
                         }
                     }
                 }
@@ -103,6 +106,7 @@ public class EmailUtil {
                             email.addBcc(user.getEmail(), user.getName());
                         } catch (EmailException e) {
                             e.printStackTrace();
+                            continue;
                         }
                     }
                 }
@@ -116,14 +120,15 @@ public class EmailUtil {
                     NodeList nodeList = parser.extractAllNodesThatMatch(filter);
                     for (int j = 0; j < nodeList.size(); j++) {
                         ImageTag img = (ImageTag) nodeList.elementAt(j);
-                        String imgUrl = EmailConstants.HOSTPATH + ":" + EmailConstants.HOSTPORT + img.getImageURL();
-                        URL url = new URL(imgUrl);
+//                        String imgUrl = EmailConstants.HOSTPATH + ":" + EmailConstants.HOSTPORT + img.getImageURL();
+                        URL url = new URL(img.getImageURL());
                         String cid = email.embed(url, "img" + j);
                         String newImgUrl = "cid:" + cid;
                         oriContent = oriContent.replace(img.getImageURL(), newImgUrl);
                     }
                 } catch (Exception e){
                     e.printStackTrace();
+                    continue;
                 }
 
                 // generate the html email, we should set the html format
@@ -131,6 +136,14 @@ public class EmailUtil {
                 htmlMsgBuf.append("<html><head><meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\"></head><body>")
                         .append(oriContent)
                         .append("</body></html>");
+
+                // set content
+                try {
+                    email.setHtmlMsg(htmlMsgBuf.toString());
+                } catch (EmailException e) {
+                    e.printStackTrace();
+                    continue;
+                }
 
                 //set attachments
                 List<Attachment> attachments = tEmail.getAttachments();
@@ -151,6 +164,7 @@ public class EmailUtil {
                             email.attach(emailAttachment);
                         } catch (EmailException e) {
                             e.printStackTrace();
+                            continue;
                         }
                     }
                 }
@@ -160,6 +174,7 @@ public class EmailUtil {
                     sucEmails.add(tEmail);
                 } catch (EmailException e) {
                     e.printStackTrace();
+                    continue;
                 }
             }
         }
