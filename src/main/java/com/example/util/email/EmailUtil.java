@@ -8,6 +8,7 @@ import java.util.concurrent.Executors;
 
 import com.example.util.email.model.Attachment;
 import com.example.util.email.model.Email;
+import com.example.util.email.model.Template;
 import com.example.util.email.model.User;
 import org.apache.commons.mail.EmailAttachment;
 import org.apache.commons.mail.EmailException;
@@ -32,8 +33,11 @@ public class EmailUtil {
 
     /**
      * send only one email
-     * @param email     email
-     * @return          the result of send email
+     *
+     * @param email
+     *          email
+     * @return
+     *          the result of send email
      */
     public static List<Email> send(Email email) {
         List<Email> emails = new ArrayList<Email>();
@@ -44,8 +48,10 @@ public class EmailUtil {
     /**
      * send some emails
      *
-     * @param emails    the emails should be sended
-     * @return          the List of the email which send success
+     * @param emails
+     *          the emails should be sended
+     * @return
+     *          the List of the email which send success
      */
     public static List<Email> send(List<Email> emails) {
         List<Email> sucEmails = new ArrayList<Email>();
@@ -184,8 +190,24 @@ public class EmailUtil {
     /**
      * send email by asynchronous
      *
-     * @param emails    the emails should send
-     * @return          the result of email which send success
+     * @param email
+     *          email
+     * @return
+     *          the result of send email
+     */
+    public static Future<List<Email>> sendByAsy(Email email) {
+        List<Email> emails = new ArrayList<Email>();
+        emails.add(email);
+        return sendByAsy(emails);
+    }
+
+    /**
+     * send some emails by asynchronous
+     *
+     * @param emails
+     *          the emails should send
+     * @return
+     *          the result of email which send success
      */
     public static Future<List<Email>> sendByAsy(final List<Email> emails) {
         return executorService.submit(new Callable<List<Email>>() {
@@ -193,6 +215,33 @@ public class EmailUtil {
                 return send(emails);
             }
         });
+    }
+
+    /**
+     * send email by template
+     *
+     * @param template
+     *          the tmplate of emails
+     * @param content
+     *          the content real value of template
+     * @param emails
+     *          the contain of email that will be sent
+     */
+    public static void sendByTemplate(Template template, List<String> content, List<Email> emails) {
+        // get the subject and content after replace
+        String tSubject = ReplaceKey.replace(template.getSubject(), content);
+        String tContent = ReplaceKey.replace(template.getContent(), content);
+
+        // set the email's fromuser, subject, content, attachments
+        for (Email email : emails) {
+            email.setFromUser(template.getFromUser());
+            email.setSubject(tSubject);
+            email.setContent(tContent);
+            email.setAttachments(template.getAttachments());
+        }
+
+        // set emails
+        send(emails);
     }
 
 }

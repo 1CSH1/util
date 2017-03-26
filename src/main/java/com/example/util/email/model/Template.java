@@ -9,7 +9,6 @@ import java.util.List;
  * @since 2/24/2017 8:48 PM
  */
 public class Template {
-/*
     //ID
     private int id;
     //名称
@@ -19,11 +18,11 @@ public class Template {
     //内容
     private String content;
     //发送人
-    private int fromUserId;
+    private User fromUser;
     //创建人
-    private int createUserId;
+    private User createUser;
     //修改人
-    private int updateUserId;
+    private User updateUser;
     //创建时间
     private Date createTime;
     //更新时间
@@ -32,24 +31,22 @@ public class Template {
     private int status;
     //附件列表
     private List<Attachment> attachments;
-    private String attachmentIds;
-
 
     public Template() {
     }
 
-    public Template(int id, String name, String subject, String content, int fromUserId, int createUserId, int updateUserId, Date createTime, Date updateTime, int status, String attachmentIds) {
+    public Template(int id, String name, String subject, String content, User fromUser, User createUser, User updateUser, Date createTime, Date updateTime, int status, List<Attachment> attachments) {
         this.id = id;
         this.name = name;
         this.subject = subject;
         this.content = content;
-        this.fromUserId = fromUserId;
-        this.createUserId = createUserId;
-        this.updateUserId = updateUserId;
+        this.fromUser = fromUser;
+        this.createUser = createUser;
+        this.updateUser = updateUser;
         this.createTime = createTime;
         this.updateTime = updateTime;
         this.status = status;
-        this.attachmentIds = attachmentIds;
+        this.attachments = attachments;
     }
 
     public int getId() {
@@ -84,28 +81,28 @@ public class Template {
         this.content = content;
     }
 
-    public int getFromUserId() {
-        return fromUserId;
+    public User getFromUser() {
+        return fromUser;
     }
 
-    public void setFromUserId(int fromUserId) {
-        this.fromUserId = fromUserId;
+    public void setFromUser(User fromUser) {
+        this.fromUser = fromUser;
     }
 
-    public int getCreateUserId() {
-        return createUserId;
+    public User getCreateUser() {
+        return createUser;
     }
 
-    public void setCreateUserId(int createUserId) {
-        this.createUserId = createUserId;
+    public void setCreateUser(User createUser) {
+        this.createUser = createUser;
     }
 
-    public int getUpdateUserId() {
-        return updateUserId;
+    public User getUpdateUser() {
+        return updateUser;
     }
 
-    public void setUpdateUserId(int updateUserId) {
-        this.updateUserId = updateUserId;
+    public void setUpdateUser(User updateUser) {
+        this.updateUser = updateUser;
     }
 
     public Date getCreateTime() {
@@ -132,12 +129,11 @@ public class Template {
         this.status = status;
     }
 
-    public String getAttachmentIds() {
-        return attachmentIds;
+    public List<Attachment> getAttachments() {
+        return attachments;
     }
 
-    public void setAttachmentIds(String attachmentIds) {
-        this.attachmentIds = attachmentIds;
+    public void setAttachments(List<Attachment> attachments) {
+        this.attachments = attachments;
     }
-    */
 }
