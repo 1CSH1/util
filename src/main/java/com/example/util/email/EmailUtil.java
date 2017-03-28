@@ -126,7 +126,6 @@ public class EmailUtil {
                     NodeList nodeList = parser.extractAllNodesThatMatch(filter);
                     for (int j = 0; j < nodeList.size(); j++) {
                         ImageTag img = (ImageTag) nodeList.elementAt(j);
-//                        String imgUrl = EmailConstants.HOSTPATH + ":" + EmailConstants.HOSTPORT + img.getImageURL();
                         URL url = new URL(img.getImageURL());
                         String cid = email.embed(url, "img" + j);
                         String newImgUrl = "cid:" + cid;
@@ -219,15 +218,33 @@ public class EmailUtil {
 
     /**
      * send email by template
-     *
-     * @param template
+     *  @param template
+     *          the tmplate of emails
+     * @param content
+     *          the content real value of template
+     * @param email
+     *          the email should send
+     * @return
+     *          the result of email which send success
+     */
+    public static List<Email> sendByTemplate(Template template, List<String> content, Email email) {
+        List<Email> emails = new ArrayList<Email>(1);
+        emails.add(email);
+        return sendByTemplate(template, content, emails);
+    }
+
+    /**
+     * send email by template
+     *  @param template
      *          the tmplate of emails
      * @param content
      *          the content real value of template
      * @param emails
-     *          the contain of email that will be sent
+     *          the emails should send
+     * @return
+     *          the result of email which send success
      */
-    public static void sendByTemplate(Template template, List<String> content, List<Email> emails) {
+    public static List<Email> sendByTemplate(Template template, List<String> content, List<Email> emails) {
         // get the subject and content after replace
         String tSubject = ReplaceKey.replace(template.getSubject(), content);
         String tContent = ReplaceKey.replace(template.getContent(), content);
@@ -241,7 +258,7 @@ public class EmailUtil {
         }
 
         // set emails
-        send(emails);
+        return send(emails);
     }
 
 }
