@@ -36,11 +36,15 @@ public class JsonUtil {
     };
 
     /**
-     * object to json
+     * list to json
+     *
+     * @param list
+     *          the list that will transform to json string
+     * @return
+     *          the json string of list transform
      */
-
-    public static String list2json() {
-        return null;
+    public static String list2json(List list) {
+        return JSON.toJSONString(list);
     }
 
     /**
