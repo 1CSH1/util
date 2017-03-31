@@ -132,11 +132,15 @@ public class JsonUtil {
      *
      * @param json
      *          the json string that will transform to object
+     * @param clazz
+     *          the class that json will transform
+     * @param <T>
+     *          the object class
      * @return
      *          the object of json string
      */
-    public static Object json2object(String json) {
-        return JSON.parse(json);
+    public static <T> Object json2object(String json, Class<T> clazz) {
+        return JSON.parseObject(json, clazz);
     }
 
 }
