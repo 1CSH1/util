@@ -82,8 +82,6 @@ public class JsonUtil {
         return JSON.toJSONString(object, config, features);
     }
 
-    // ....
-
 
     /**
      * json to list
@@ -113,6 +111,7 @@ public class JsonUtil {
         return JSONObject.parseObject(json);
     }
 
+
     /**
      * json string to object array
      *
@@ -120,11 +119,21 @@ public class JsonUtil {
      *          the json string will transform to object array
      * @param clazz
      *          the class of the json will transform
+     * @param ts
+     *          the real object array
+     * @param <T>
+     *          the real object
      * @return
      *          the object array of the json string
+     *
+     * @param json
+     * @param clazz
+     * @param ts
+     * @param <T>
+     * @return
      */
-    public static <T> Object[] json2array(String json, Class<T> clazz) {
-        return JSON.parseArray(json, clazz).toArray();
+    public static <T> T[] json2array(String json, Class<T> clazz, T[] ts) {
+        return JSON.parseArray(json, clazz).toArray(ts);
     }
 
     /**
