@@ -8,9 +8,11 @@ import com.alibaba.fastjson.serializer.SerializerFeature;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 /**
+ * json util
+ * use fastjson.jar
+ *
  * @author James-CSH
  * @since 17-3-29 下午10:41
  */
