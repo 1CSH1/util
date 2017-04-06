@@ -22,9 +22,19 @@ import java.util.Map;
  */
 public class XmlUtil {
 
+    /**
+     * object transfarm to xml
+     *
+     * @param object
+     * @param <T>
+     * @return
+     */
     public static <T> String object2xml(T object) {
-        Document document = DocumentHelper.createDocument();
+        if (null == object) {
+            return "";
+        }
 
+        Document document = DocumentHelper.createDocument();
         //get the object simple name
         String objectName = object.getClass().getSimpleName();
         //get all fields of the object
@@ -37,7 +47,10 @@ public class XmlUtil {
                 methodStr = "get" + property.getName().substring(0, 1).toUpperCase() + property.getName().substring(1);
                 Method method = object.getClass().getMethod(methodStr);
                 // add the element
-                root.addElement(property.getName()).setText(method.invoke(object).toString());
+                Object obj = method.invoke(object);
+                if (null != obj) {
+                    root.addElement(property.getName()).setText(obj.toString());
+                }
             }
         } catch (NoSuchMethodException e) {
             e.printStackTrace();
@@ -47,7 +60,7 @@ public class XmlUtil {
             e.printStackTrace();
         }
 
-        return root.toString();
+        return document.asXML();
     }
 
     public static String array2xml() {
