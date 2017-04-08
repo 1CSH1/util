@@ -12,6 +12,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * xml util
@@ -144,8 +145,45 @@ public class XmlUtil {
         return document.asXML();
     }
 
-    public static String map2xml() {
-        return null;
+    public static String map2xml(Map<String, Object> map) {
+        if (null == map || map.isEmpty()) {
+            return "";
+        }
+
+        Document document = DocumentHelper.createDocument();
+        Element root = document.addElement("Maps");
+        Set<String> keys = map.keySet();
+        try {
+            String methodStr = "";
+            Object object = null;
+            // traverse the objects
+            for (String key : keys) {
+                object = map.get(key);
+
+                Element objectRoot = root.addElement(object.getClass().getSimpleName());
+
+                // get all fields of the object
+                Field[] objectProperties = object.getClass().getDeclaredFields();
+                // set the root element
+                for (Field property : objectProperties) {
+                    methodStr = "get" + property.getName().substring(0, 1).toUpperCase() + property.getName().substring(1);
+                    Method method = object.getClass().getMethod(methodStr);
+                    // add the element
+                    Object obj = method.invoke(object);
+                    if (null != obj) {
+                        objectRoot.addElement(property.getName()).setText(obj.toString());
+                    }
+                }
+            }
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+        return document.asXML();
     }
 
     public static <T> T xml2object(String xml, Class<T> clazz) {
