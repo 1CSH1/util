@@ -24,7 +24,7 @@ import java.util.Set;
 public class XmlUtil {
 
     /**
-     * object transfarm to xml
+     * object transfarm to xml string
      *
      * @param object
      *              the object will transform to xml
@@ -67,6 +67,16 @@ public class XmlUtil {
         return document.asXML();
     }
 
+    /**
+     * array transform to xml string
+     *
+     * @param objects
+     *              the array object that will transform to xml string
+     * @param <T>
+     *              the real object
+     * @return
+     *              the xml string of array
+     */
     public static <T> String array2xml(T[] objects) {
         if (null == objects || objects.length <= 0) {
             return "";
@@ -106,6 +116,16 @@ public class XmlUtil {
         return document.asXML();
     }
 
+    /**
+     * list transform to xml string
+     *
+     * @param list
+     *              the list that will transform to xml string
+     * @param <T>
+     *              the real object
+     * @return
+     *              the xml string of list
+     */
     public static <T> String list2xml(List<T> list) {
         if (null == list || list.isEmpty()) {
             return "";
@@ -145,6 +165,14 @@ public class XmlUtil {
         return document.asXML();
     }
 
+    /**
+     * map transform to xml string
+     *
+     * @param map
+     *              the map object that will transform to xml string
+     * @return
+     *              the xml string of map
+     */
     public static String map2xml(Map<String, Object> map) {
         if (null == map || map.isEmpty()) {
             return "";
@@ -159,8 +187,10 @@ public class XmlUtil {
             // traverse the objects
             for (String key : keys) {
                 object = map.get(key);
+                // add the key to xml string, it is the father of object
+                Element keyRoot = root.addElement(key);
 
-                Element objectRoot = root.addElement(object.getClass().getSimpleName());
+                Element objectRoot = keyRoot.addElement(object.getClass().getSimpleName());
 
                 // get all fields of the object
                 Field[] objectProperties = object.getClass().getDeclaredFields();
