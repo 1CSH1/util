@@ -5,8 +5,12 @@ import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
 import org.dom4j.io.SAXReader;
+import org.xml.sax.SAXException;
+import org.xml.sax.helpers.XMLReaderFactory;
 
-import java.io.File;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -217,6 +221,36 @@ public class XmlUtil {
     }
 
     public static <T> T xml2object(String xml, Class<T> clazz) {
+        SAXReader reader = new SAXReader();
+        Document document = null;
+        try {
+            document = reader.read(new StringReader(xml));
+            Element rootElement = document.getRootElement();
+            Class clazzT = Class.forName(clazz.getName());
+            T object = (T) clazzT.newInstance();
+            Field[] fields = clazz.getDeclaredFields();
+            for (Field field : fields) {
+                field.setAccessible(true);
+System.out.println(field.getName());
+System.out.println(rootElement.element(field.getName()).getText());
+System.out.println(field.getGenericType().getTypeName());
+                Class type = field.getType();
+                Object ob = type.newInstance();
+//                type.cast()
+                field.set(object, rootElement.element(field.getName()).getText());
+            }
+
+            return object;
+        } catch (DocumentException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+        System.out.println(document.asXML());
         return null;
     }
 

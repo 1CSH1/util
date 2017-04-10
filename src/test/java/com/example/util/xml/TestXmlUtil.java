@@ -1,6 +1,7 @@
 package com.example.util.xml;
 
 import com.example.util.json.Person;
+import org.dom4j.DocumentException;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -329,5 +330,39 @@ System.out.println(XmlUtil.object2xml(person));
   </person5>
 </Maps>
  */
+    }
+
+    @Test
+    public void testXml2Object() {
+        Person person = new Person();
+        person.setId(12);
+        person.setName("James勒布朗");
+        person.setAge(32);
+        person.setGender(1);
+        Person child = new Person();
+        child.setId(1);
+        child.setName("James勒布朗11");
+        child.setAge(1);
+        child.setGender(1);
+        child.setChildren(null);
+
+        List<Person> children = new ArrayList<Person>();
+        children.add(child);
+
+        String xml = XmlUtil.object2xml(person);
+
+        Person person2 = XmlUtil.xml2object(xml, Person.class);
+        System.out.println(person2);
+/*
+<?xml version="1.0" encoding="utf-8"?>
+
+<Person>
+    <id>12</id>
+    <name>James勒布朗</name>
+    <age>32</age>
+    <gender>1</gender>
+</Person>
+
+*/
     }
 }
