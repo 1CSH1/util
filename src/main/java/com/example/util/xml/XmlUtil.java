@@ -4,16 +4,23 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 import org.dom4j.DocumentHelper;
 import org.dom4j.Element;
+import org.dom4j.io.OutputFormat;
 import org.dom4j.io.SAXReader;
+import org.dom4j.io.SAXValidator;
+import org.dom4j.io.XMLWriter;
+import org.dom4j.util.XMLErrorHandler;
 import org.xml.sax.SAXException;
 import org.xml.sax.helpers.XMLReaderFactory;
 
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.parsers.SAXParser;
+import javax.xml.parsers.SAXParserFactory;
 import java.io.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.net.URL;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -220,50 +227,5 @@ public class XmlUtil {
         return document.asXML();
     }
 
-    public static <T> T xml2object(String xml, Class<T> clazz) {
-        SAXReader reader = new SAXReader();
-        Document document = null;
-        try {
-            document = reader.read(new StringReader(xml));
-            Element rootElement = document.getRootElement();
-            Class clazzT = Class.forName(clazz.getName());
-            T object = (T) clazzT.newInstance();
-            Field[] fields = clazz.getDeclaredFields();
-            for (Field field : fields) {
-                field.setAccessible(true);
-System.out.println(field.getName());
-System.out.println(rootElement.element(field.getName()).getText());
-System.out.println(field.getGenericType().getTypeName());
-                Class type = field.getType();
-                Object ob = type.newInstance();
-//                type.cast()
-                field.set(object, rootElement.element(field.getName()).getText());
-            }
-
-            return object;
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        System.out.println(document.asXML());
-        return null;
-    }
-
-    public static <T> T[] xml2array(String xml, Class<T> clazz) {
-        return null;
-    }
-
-    public static <T> List<T> xml2list(String xml, Class<T> clazz) {
-        return null;
-    }
-
-    public static Map xml2map(String xml) {
-        return null;
-    }
 
 }
